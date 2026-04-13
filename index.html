@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آدابي الرقمية — برنامج قيمنا حياة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple-deep: #1a0533;
+  --purple-mid: #3d1172;
+  --purple-bright: #7c3aed;
+  --purple-light: #a855f7;
+  --purple-glow: #d946ef;
+  --teal: #06b6d4;
+  --teal-light: #67e8f9;
+  --gold: #f59e0b;
+  --gold-light: #fde68a;
+  --green: #10b981;
+  --red: #ef4444;
+  --white: #ffffff;
+  --off-white: #faf5ff;
+  --text-dim: rgba(255,255,255,0.6);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--purple-deep);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── BACKGROUND MESH ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,58,237,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(6,182,212,0.2) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 40% at 60% 30%, rgba(217,70,239,0.15) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── NOISE GRAIN ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.wrapper { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* ─── COVER ─── */
+.cover {
+  position: relative;
+  text-align: center;
+  padding: 5rem 2rem 4rem;
+  margin-bottom: 3rem;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(124,58,237,0.4);
+  background: linear-gradient(135deg, rgba(61,17,114,0.8) 0%, rgba(26,5,51,0.9) 100%);
+  backdrop-filter: blur(20px);
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217,70,239,0.3), transparent 70%);
+}
+.cover::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -40px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6,182,212,0.2), transparent 70%);
+}
+
+.cover-orbit {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 400px; height: 400px;
+  margin: -200px 0 0 -200px;
+  border: 1px dashed rgba(124,58,237,0.2);
+  border-radius: 50%;
+  animation: spin 30s linear infinite;
+}
+.cover-orbit::before {
+  content: '💻';
+  position: absolute;
+  top: -14px; left: 50%;
+  font-size: 22px;
+  margin-left: -14px;
+}
+.cover-orbit-2 {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 280px; height: 280px;
+  margin: -140px 0 0 -140px;
+  border: 1px dashed rgba(6,182,212,0.2);
+  border-radius: 50%;
+  animation: spin 20s linear infinite reverse;
+}
+.cover-orbit-2::before {
+  content: '🛡️';
+  position: absolute;
+  bottom: -14px; left: 50%;
+  font-size: 18px;
+  margin-left: -14px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.cover-badge {
+  display: inline-block;
+  background: rgba(124,58,237,0.3);
+  border: 1px solid rgba(168,85,247,0.4);
+  color: var(--purple-light);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  padding: 6px 18px;
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.cover-icon-main {
+  font-size: 72px;
+  display: block;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 30px rgba(217,70,239,0.5));
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.cover-title {
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #fff 30%, var(--purple-light) 60%, var(--teal-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cover-subtitle {
+  font-size: 16px;
+  color: var(--text-dim);
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+.cover-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.cover-tag {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-weight: 500;
+}
+
+/* ─── PROGRESS ─── */
+.progress-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+.progress-step {
+  width: 36px; height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.15);
+  transition: background 0.4s, width 0.4s;
+  cursor: pointer;
+}
+.progress-step.active { background: var(--purple-bright); width: 60px; }
+.progress-step.done { background: var(--teal); }
+
+/* ─── NAV ─── */
+.nav {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 6px;
+}
+.nav-btn {
+  flex: 1;
+  min-width: 110px;
+  padding: 12px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.nav-btn:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+.nav-btn.active {
+  background: linear-gradient(135deg, var(--purple-bright), var(--purple-glow));
+  color: var(--white);
+  box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+}
+
+/* ─── SECTIONS ─── */
+.section { display: none; animation: fadeUp 0.4s ease; }
+.section.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SECTION HEADER ─── */
+.s-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.s-icon {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.s-title { font-size: 22px; font-weight: 700; color: var(--white); }
+.s-desc { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+/* ─── CARDS GRID (intro) ─── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--purple-bright), var(--teal));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.5); box-shadow: 0 12px 40px rgba(124,58,237,0.2); }
+.card:hover::before { opacity: 1; }
+.card-emoji { font-size: 30px; margin-bottom: 0.75rem; display: block; }
+.card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--white); }
+.card-body { font-size: 13px; color: var(--text-dim); line-height: 1.7; font-weight: 400; }
+
+/* ─── RULES (rules) ─── */
+.rules-list { display: flex; flex-direction: column; gap: 10px; }
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+.rule-item:hover { background: rgba(124,58,237,0.12); border-color: rgba(124,58,237,0.3); }
+.rule-num {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--purple-bright), var(--purple-glow));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(124,58,237,0.3);
+}
+.rule-text { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.7; font-weight: 400; }
+.rule-text b { color: var(--purple-light); font-weight: 700; }
+
+/* ─── COMPARE ─── */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 1.5rem; }
+.compare-col { border-radius: 20px; padding: 1.5rem; }
+.compare-col.pos { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); }
+.compare-col.neg { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); }
+.compare-head {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.compare-col.pos .compare-head { color: #6ee7b7; }
+.compare-col.neg .compare-head { color: #fca5a5; }
+.compare-items { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.compare-items li { font-size: 13px; line-height: 1.6; display: flex; align-items: flex-start; gap: 8px; font-weight: 400; }
+.compare-col.pos .compare-items li { color: #a7f3d0; }
+.compare-col.neg .compare-items li { color: #fecaca; }
+.ci-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+.ci-dot.g { background: var(--green); }
+.ci-dot.r { background: var(--red); }
+
+.tip-box {
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.tip-icon { font-size: 22px; flex-shrink: 0; }
+.tip-text { font-size: 13px; color: #fde68a; line-height: 1.7; font-weight: 400; }
+.tip-text b { font-weight: 700; }
+
+/* ─── QUIZ ─── */
+.quiz-wrap {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 24px;
+  padding: 2rem;
+}
+.quiz-count { font-size: 12px; color: var(--text-dim); margin-bottom: 0.75rem; font-weight: 600; letter-spacing: 1px; }
+.quiz-q { font-size: 17px; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.6; }
+.quiz-opts { display: flex; flex-direction: column; gap: 10px; }
+.quiz-opt {
+  padding: 13px 18px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  text-align: right;
+  transition: all 0.2s;
+}
+.quiz-opt:hover { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.5); color: var(--white); }
+.quiz-opt.correct { background: rgba(16,185,129,0.15); border-color: var(--green); color: #6ee7b7; }
+.quiz-opt.wrong { background: rgba(239,68,68,0.12); border-color: var(--red); color: #fca5a5; }
+.quiz-fb {
+  display: none;
+  margin-top: 1rem;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13px; font-weight: 500;
+  line-height: 1.6;
+}
+.quiz-fb.show { display: block; }
+.quiz-fb.correct { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+.quiz-fb.wrong { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+.quiz-next-btn {
+  display: none;
+  margin-top: 1.25rem;
+  padding: 11px 24px;
+  background: linear-gradient(135deg, var(--purple-bright), var(--purple-glow));
+  border: none;
+  border-radius: 12px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+}
+.quiz-next-btn.show { display: inline-block; }
+.quiz-next-btn:hover { opacity: 0.85; transform: scale(0.98); }
+
+.quiz-score-wrap { text-align: center; padding: 3rem 1rem; }
+.score-circle {
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-bright), var(--purple-glow));
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 0 60px rgba(124,58,237,0.4);
+}
+.score-num { font-size: 42px; font-weight: 900; color: var(--white); line-height: 1; }
+.score-of { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 500; }
+.score-msg { font-size: 18px; font-weight: 700; margin-bottom: 0.5rem; }
+.score-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 2rem; font-weight: 400; }
+.restart-btn {
+  padding: 12px 32px;
+  background: transparent;
+  border: 1px solid rgba(124,58,237,0.5);
+  border-radius: 14px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--purple-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.restart-btn:hover { background: rgba(124,58,237,0.15); }
+
+/* ─── PLEDGE ─── */
+.pledge-header-art {
+  position: relative;
+  text-align: center;
+  padding: 2.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(61,17,114,0.6), rgba(26,5,51,0.8));
+  border: 1px solid rgba(124,58,237,0.3);
+  overflow: hidden;
+}
+.pledge-header-art::before {
+  content: '✨';
+  position: absolute; top: 16px; right: 20px; font-size: 20px; opacity: 0.6;
+}
+.pledge-header-art::after {
+  content: '⭐';
+  position: absolute; bottom: 16px; left: 20px; font-size: 18px; opacity: 0.5;
+}
+.pledge-title { font-size: 20px; font-weight: 900; color: var(--white); margin-bottom: 6px; }
+.pledge-sub { font-size: 13px; color: var(--text-dim); font-weight: 400; }
+
+.pledge-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+.pledge-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.pledge-item:hover { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.3); }
+.pledge-item.checked { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.35); }
+.pledge-checkbox {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+.pledge-item.checked .pledge-checkbox {
+  background: var(--green);
+  border-color: var(--green);
+}
+.pledge-item-text { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); line-height: 1.5; }
+.pledge-item.checked .pledge-item-text { color: #a7f3d0; }
+
+.sign-area { text-align: center; }
+.sign-btn {
+  padding: 16px 48px;
+  background: linear-gradient(135deg, var(--purple-bright), var(--purple-glow));
+  border: none;
+  border-radius: 16px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 30px rgba(124,58,237,0.4);
+  opacity: 0.4;
+  pointer-events: none;
+}
+.sign-btn.ready { opacity: 1; pointer-events: all; }
+.sign-btn.ready:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(124,58,237,0.5); }
+
+.signed-celebration {
+  display: none;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: 20px;
+  margin-top: 1.5rem;
+}
+.signed-celebration.show { display: block; animation: fadeUp 0.5s ease; }
+.cel-emoji { font-size: 52px; display: block; margin-bottom: 1rem; animation: float 2s ease-in-out infinite; }
+.cel-title { font-size: 20px; font-weight: 900; color: #6ee7b7; margin-bottom: 0.5rem; }
+.cel-sub { font-size: 14px; color: rgba(167,243,208,0.7); font-weight: 400; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 560px) {
+  .cover-title { font-size: 34px; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .nav-btn span.lab { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-orbit"></div>
+    <div class="cover-orbit-2"></div>
+    <span class="cover-badge">برنامج قيمنا حياة</span>
+    <span class="cover-icon-main">🌐</span>
+    <div class="cover-title">آدابي الرقمية</div>
+    <div class="cover-subtitle">كتيّب تفاعلي للسلوك الرقمي الصحيح</div>
+    <div class="cover-tags">
+      <span class="cover-tag">الاحترام الرقمي</span>
+      <span class="cover-tag">المسؤولية الرقمية</span>
+      <span class="cover-tag">التواصل الآمن</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-track">
+    <div class="progress-step active" onclick="show('intro',0)"></div>
+    <div class="progress-step" onclick="show('rules',1)"></div>
+    <div class="progress-step" onclick="show('compare',2)"></div>
+    <div class="progress-step" onclick="show('quiz',3)"></div>
+    <div class="progress-step" onclick="show('pledge',4)"></div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <button class="nav-btn active" onclick="show('intro',0)">🏠 <span class="lab">المقدمة</span></button>
+    <button class="nav-btn" onclick="show('rules',1)">⭐ <span class="lab">القواعد</span></button>
+    <button class="nav-btn" onclick="show('compare',2)">⚖️ <span class="lab">المقارنة</span></button>
+    <button class="nav-btn" onclick="show('quiz',3)">🎯 <span class="lab">الاختبار</span></button>
+    <button class="nav-btn" onclick="show('pledge',4)">✍️ <span class="lab">التعهد</span></button>
+  </div>
+
+  <!-- ══ INTRO ══ -->
+  <div id="intro" class="section active">
+    <div class="s-header">
+      <div class="s-icon" style="background:linear-gradient(135deg,#3d1172,#7c3aed);">🌐</div>
+      <div>
+        <div class="s-title">ما هي الآداب الرقمية؟</div>
+        <div class="s-desc">تعرّف على مفهوم السلوك الرقمي وأهميته في حياتنا</div>
+      </div>
+    </div>
+    <div class="cards-grid">
+      <div class="card"><span class="card-emoji">🤝</span><div class="card-title">الاحترام المتبادل</div><div class="card-body">تعامل مع الآخرين في الفضاء الرقمي بنفس الاحترام الذي تتوقعه منهم في الواقع.</div></div>
+      <div class="card"><span class="card-emoji">🛡️</span><div class="card-title">حماية الخصوصية</div><div class="card-body">لا تشارك معلومات شخصية لك أو لغيرك دون إذن صريح منهم.</div></div>
+      <div class="card"><span class="card-emoji">💬</span><div class="card-title">التواصل الإيجابي</div><div class="card-body">استخدم كلمات بنّاءة وابتعد عن الألفاظ الجارحة والإساءة الرقمية.</div></div>
+      <div class="card"><span class="card-emoji">✅</span><div class="card-title">التحقق قبل النشر</div><div class="card-body">تحقق من صحة المعلومات قبل مشاركتها لتجنب نشر الأخبار المضللة.</div></div>
+      <div class="card"><span class="card-emoji">⏱️</span><div class="card-title">إدارة الوقت الرقمي</div><div class="card-body">وازن بين وقتك على الإنترنت وبقية أنشطتك اليومية والاجتماعية.</div></div>
+      <div class="card"><span class="card-emoji">📚</span><div class="card-title">الاستخدام الهادف</div><div class="card-body">وجّه استخدامك للإنترنت نحو التعلم والتطوير والمحتوى البنّاء.</div></div>
+    </div>
+  </div>
+
+  <!-- ══ RULES ══ -->
+  <div id="rules" class="section">
+    <div class="s-header">
+      <div class="s-icon" style="background:linear-gradient(135deg,#0e7490,#06b6d4);">⭐</div>
+      <div>
+        <div class="s-title">القواعد الذهبية للسلوك الرقمي</div>
+        <div class="s-desc">عشر قواعد أساسية يجب الالتزام بها في الفضاء الرقمي</div>
+      </div>
+    </div>
+    <div class="rules-list">
+      <div class="rule-item"><span class="rule-num">1</span><div class="rule-text"><b>فكّر قبل أن تنشر:</b> كل ما تنشره يترك أثرًا دائمًا على الإنترنت، اسأل نفسك: هل سيضر هذا أحدًا؟</div></div>
+      <div class="rule-item"><span class="rule-num">2</span><div class="rule-text"><b>احترم حقوق الملكية:</b> لا تنسخ أو تستخدم محتوى الآخرين دون الإشارة إلى مصدره.</div></div>
+      <div class="rule-item"><span class="rule-num">3</span><div class="rule-text"><b>لا للتنمر الإلكتروني:</b> الإيذاء الرقمي كالإيذاء الجسدي تمامًا، كلاهما مؤلم ومرفوض.</div></div>
+      <div class="rule-item"><span class="rule-num">4</span><div class="rule-text"><b>احفظ كلمات المرور:</b> لا تشارك بياناتك الشخصية مع أحد، وغيّر كلماتك السرية بانتظام.</div></div>
+      <div class="rule-item"><span class="rule-num">5</span><div class="rule-text"><b>تحقق من المصادر:</b> لا تصدّق كل ما تقرأه على الإنترنت، ابحث عن المصادر الموثوقة دائمًا.</div></div>
+      <div class="rule-item"><span class="rule-num">6</span><div class="rule-text"><b>استأذن قبل التصوير:</b> لا تلتقط صور الآخرين أو تنشرها دون إذنهم الصريح.</div></div>
+      <div class="rule-item"><span class="rule-num">7</span><div class="rule-text"><b>كن لطيفًا في تعليقاتك:</b> اختلاف الرأي لا يبرر الإساءة، عبّر عن رأيك باحترام وأدب.</div></div>
+      <div class="rule-item"><span class="rule-num">8</span><div class="rule-text"><b>اتبع تعليمات الأهل:</b> استشر والديك عند مواجهة مواقف مشبوهة أو مجهولة على الإنترنت.</div></div>
+      <div class="rule-item"><span class="rule-num">9</span><div class="rule-text"><b>لا تضيع وقتك:</b> الإنترنت أداة للتعلم، استثمر وقتك في محتوى يفيدك ويطور مهاراتك.</div></div>
+      <div class="rule-item"><span class="rule-num">10</span><div class="rule-text"><b>كن نموذجًا إيجابيًا:</b> أنت مسؤول عن أثرك الرقمي، اجعله أثرًا طيبًا يُذكر.</div></div>
+    </div>
+  </div>
+
+  <!-- ══ COMPARE ══ -->
+  <div id="compare" class="section">
+    <div class="s-header">
+      <div class="s-icon" style="background:linear-gradient(135deg,#92400e,#f59e0b);">⚖️</div>
+      <div>
+        <div class="s-title">سلوكيات مقارنة</div>
+        <div class="s-desc">ميّز بين السلوك الرقمي الإيجابي والسلبي</div>
+      </div>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-col pos">
+        <div class="compare-head">✅ السلوك الإيجابي</div>
+        <ul class="compare-items">
+          <li><span class="ci-dot g"></span>التحقق من المعلومات قبل مشاركتها</li>
+          <li><span class="ci-dot g"></span>الرد باحترام حتى عند الاختلاف</li>
+          <li><span class="ci-dot g"></span>الإبلاغ عن المحتوى المسيء</li>
+          <li><span class="ci-dot g"></span>إعطاء المصدر عند نقل المعلومات</li>
+          <li><span class="ci-dot g"></span>حماية بياناتك الشخصية</li>
+          <li><span class="ci-dot g"></span>تشجيع الآخرين ودعم مشاركاتهم</li>
+        </ul>
+      </div>
+      <div class="compare-col neg">
+        <div class="compare-head">❌ السلوك السلبي</div>
+        <ul class="compare-items">
+          <li><span class="ci-dot r"></span>نشر الشائعات والأخبار المضللة</li>
+          <li><span class="ci-dot r"></span>الإساءة والسب في التعليقات</li>
+          <li><span class="ci-dot r"></span>تجاهل المحتوى المسيء</li>
+          <li><span class="ci-dot r"></span>سرقة المحتوى دون ذكر المصدر</li>
+          <li><span class="ci-dot r"></span>مشاركة معلومات الآخرين الخاصة</li>
+          <li><span class="ci-dot r"></span>إحباط الآخرين والتعليق بسلبية</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <div class="tip-text"><b>تذكّر دائمًا:</b> كل ما تنشره أو تكتبه على الإنترنت يعكس شخصيتك الحقيقية. الفضاء الرقمي ليس مجهولًا كما يظن البعض — أنت مسؤول عن كل كلمة وكل صورة تشاركها.</div>
+    </div>
+  </div>
+
+  <!-- ══ QUIZ ══ -->
+  <div id="quiz" class="section">
+    <div class="s-header">
+      <div class="s-icon" style="background:linear-gradient(135deg,#be185d,#d946ef);">🎯</div>
+      <div>
+        <div class="s-title">اختبر معلوماتك</div>
+        <div class="s-desc">أجب على الأسئلة لتقييم فهمك للآداب الرقمية</div>
+      </div>
+    </div>
+    <div class="quiz-wrap" id="quiz-wrap"></div>
+  </div>
+
+  <!-- ══ PLEDGE ══ -->
+  <div id="pledge" class="section">
+    <div class="s-header">
+      <div class="s-icon" style="background:linear-gradient(135deg,#065f46,#10b981);">🌟</div>
+      <div>
+        <div class="s-title">تعهدي الرقمي</div>
+        <div class="s-desc">وقّع على تعهدك بالتزام آداب السلوك الرقمي</div>
+      </div>
+    </div>
+    <div class="pledge-header-art">
+      <div class="pledge-title">أتعهد أمام نفسي والآخرين</div>
+      <div class="pledge-sub">اضغط على كل بند لتؤكد التزامك به</div>
+    </div>
+    <div class="pledge-items" id="pledge-items">
+      <div class="pledge-item" onclick="togglePledge(this)">
+        <div class="pledge-checkbox"></div>
+        <div class="pledge-item-text">سأتحقق من المعلومات قبل نشرها أو مشاركتها.</div>
+      </div>
+      <div class="pledge-item" onclick="togglePledge(this)">
+        <div class="pledge-checkbox"></div>
+        <div class="pledge-item-text">سأتعامل مع الجميع باحترام في الفضاء الرقمي.</div>
+      </div>
+      <div class="pledge-item" onclick="togglePledge(this)">
+        <div class="pledge-checkbox"></div>
+        <div class="pledge-item-text">سأحمي خصوصيتي وخصوصية الآخرين دائمًا.</div>
+      </div>
+      <div class="pledge-item" onclick="togglePledge(this)">
+        <div class="pledge-checkbox"></div>
+        <div class="pledge-item-text">لن أنشر أي محتوى مسيء أو ضار بالآخرين.</div>
+      </div>
+      <div class="pledge-item" onclick="togglePledge(this)">
+        <div class="pledge-checkbox"></div>
+        <div class="pledge-item-text">سأستخدم الإنترنت للتعلم والاستفادة والتطوير.</div>
+      </div>
+      <div class="pledge-item" onclick="togglePledge(this)">
+        <div class="pledge-checkbox"></div>
+        <div class="pledge-item-text">سأبلّغ عن أي محتوى مؤذٍ أو غير لائق فور رؤيته.</div>
+      </div>
+    </div>
+    <div class="sign-area">
+      <button class="sign-btn" id="sign-btn" onclick="signPledge()">✍️ وقّع تعهدك الآن</button>
+    </div>
+    <div class="signed-celebration" id="celebration">
+      <span class="cel-emoji">🏆</span>
+      <div class="cel-title">أحسنت! تعهدك مُوقَّع</div>
+      <div class="cel-sub">أنت الآن سفير للسلوك الرقمي الإيجابي في مجتمعك</div>
+    </div>
+  </div>
+
+</div><!-- end wrapper -->
+
+<script>
+// ── NAV ──
+function show(id, idx) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.progress-step').forEach((s,i) => {
+    s.classList.remove('active');
+    if (i < idx) s.classList.add('done'); else s.classList.remove('done');
+  });
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  document.querySelectorAll('.progress-step')[idx].classList.add('active');
+}
+
+// ── QUIZ ──
+const Qs = [
+  { q:"صديقك أرسل لك خبرًا مثيرًا على واتساب، ماذا تفعل؟", opts:["أعيد إرساله فورًا لجميع جهات الاتصال","أتحقق من صحته في مصادر موثوقة أولًا","أنشره على حساباتي في وسائل التواصل","أتجاهله تمامًا"], c:1, fb:"ممتاز! التحقق من المعلومات قبل نشرها من أهم قواعد الآداب الرقمية." },
+  { q:"رأيت تعليقًا مسيئًا على أحد الطلاب في مجموعة الدراسة، ماذا تفعل؟", opts:["أضحك وأواصل القراءة","أضيف تعليقًا مشابهًا","أبلّغ المشرف وأطلب حذفه","أحذف نفسي من المجموعة"], c:2, fb:"رائع! الإبلاغ عن المحتوى المسيء هو الموقف الصحيح ويحمي المجتمع الرقمي." },
+  { q:"أي من التصرفات يُعدّ سلوكًا رقميًا إيجابيًا؟", opts:["نشر صور الأصدقاء دون إذنهم","تصميم محتوى تعليمي ومشاركته","التعليق بألفاظ نابية عند الغضب","استخدام حسابات وهمية"], c:1, fb:"صحيح! إنتاج ومشاركة المحتوى التعليمي هو نموذج للسلوك الرقمي الإيجابي." },
+  { q:"ما الوقت المناسب لاستخدام هاتفك أثناء وجبة عائلية؟", opts:["طوال الوقت إذا كانت هناك رسائل مهمة","لا بأس برؤية الإشعارات أحيانًا","التركيز على العائلة ووضع الهاتف جانبًا","استخدامه للتصوير ونشر الطعام"], c:2, fb:"أحسنت! تخصيص وقت بعيدًا عن الأجهزة للأسرة من أهم قيم التوازن الرقمي." },
+  { q:"وجدت محتوى رائعًا وتريد مشاركته مع زملائك، ماذا تفعل؟", opts:["أنقله كاملًا وكأنه من إنتاجي","أذكر اسم صاحبه والمصدر بوضوح","أعدّله قليلًا لأتجنب حقوق الملكية","أرفض مشاركته حتى لا يتهمني أحد"], c:1, fb:"ممتاز! ذكر المصدر وصاحب الحقوق واجب أدبي وقانوني في الفضاء الرقمي." }
+];
+let cur=0, score=0, answered=false;
+
+function renderQ(){
+  const w = document.getElementById('quiz-wrap');
+  if(cur >= Qs.length){
+    const pct = Math.round(score/Qs.length*100);
+    const msg = score>=4 ? '🌟 ممتاز! أنت ملمّ جيدًا بآداب السلوك الرقمي.' : score>=3 ? '👍 جيد! راجع الأقسام لتعزيز معلوماتك.' : '📖 راجع الكتيّب مجددًا وأعد الاختبار.';
+    w.innerHTML = `<div class="quiz-score-wrap"><div class="score-circle"><div class="score-num">${score}</div><div class="score-of">من ${Qs.length}</div></div><div class="score-msg">${msg}</div><div class="score-sub">نسبة نجاحك: ${pct}%</div><button class="restart-btn" onclick="restartQ()">↺ أعد الاختبار</button></div>`;
+    return;
+  }
+  const q = Qs[cur];
+  w.innerHTML = `<div class="quiz-count">سؤال ${cur+1} من ${Qs.length}</div><div class="quiz-q">${q.q}</div><div class="quiz-opts">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQ(${i})">${o}</button>`).join('')}</div><div class="quiz-fb" id="qfb"></div><button class="quiz-next-btn" id="qnxt" onclick="nextQ()">التالي ←</button>`;
+  answered=false;
+}
+
+function answerQ(i){
+  if(answered) return;
+  answered=true;
+  const q=Qs[cur];
+  document.querySelectorAll('.quiz-opt').forEach((o,j)=>{
+    if(j===q.c) o.classList.add('correct');
+    else if(j===i) o.classList.add('wrong');
+    o.style.pointerEvents='none';
+  });
+  if(i===q.c) score++;
+  const fb=document.getElementById('qfb');
+  fb.textContent=q.fb;
+  fb.className='quiz-fb show '+(i===q.c?'correct':'wrong');
+  document.getElementById('qnxt').classList.add('show');
+}
+function nextQ(){ cur++; renderQ(); }
+function restartQ(){ cur=0; score=0; renderQ(); }
+renderQ();
+
+// ── PLEDGE ──
+function togglePledge(el){
+  el.classList.toggle('checked');
+  el.querySelector('.pledge-checkbox').textContent = el.classList.contains('checked') ? '✓' : '';
+  const all = document.querySelectorAll('.pledge-item');
+  const allDone = [...all].every(p=>p.classList.contains('checked'));
+  const btn = document.getElementById('sign-btn');
+  if(allDone) btn.classList.add('ready'); else btn.classList.remove('ready');
+}
+function signPledge(){
+  document.getElementById('sign-btn').style.display='none';
+  document.getElementById('celebration').classList.add('show');
+}
+</script>
+</body>
+</html>
